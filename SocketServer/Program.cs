@@ -67,11 +67,9 @@ namespace SocketServer
                         int idx = random.Next(0, _r.Length-1);
                         socketServer.SendMessage(e.SocketClient, SocketResponseMessage.Ok($"Hi {_r[idx]}"));
                     });
-                    Log.Information("Start PeriodicTask");
                     break;
                 case STOP_COMMAND:
                     e.SocketClient.StopPeriodicTask();
-                    Log.Information("Stop PeriodicTask");
                     break;
                 default:
                     break;

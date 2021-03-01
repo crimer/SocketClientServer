@@ -1,5 +1,8 @@
 ﻿namespace SocketServer.Sockets.EventArguments
 {
+    /// <summary>
+    /// Аргументы события отключения клиента
+    /// </summary>
     public class OnClientDisconnectedEventArgs
     {
         private SocketClient _socketClient;

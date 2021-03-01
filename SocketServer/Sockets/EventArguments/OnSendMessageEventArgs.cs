@@ -2,6 +2,9 @@
 
 namespace SocketServer.Sockets.EventArguments
 {
+    /// <summary>
+    /// Аргументы отправки данных клиенту
+    /// </summary>
     public class OnSendMessageEventArgs
     {
         private SocketClient _socketClient;

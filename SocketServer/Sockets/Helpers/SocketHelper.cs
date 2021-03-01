@@ -19,6 +19,12 @@ namespace SocketServer.Sockets.Helpers
             return Encoding.Default.GetBytes(str);
         }
 
+        /// <summary>
+        /// Байты в строку json, потом в модель
+        /// </summary>
+        /// <typeparam name="T">Тип модели</typeparam>
+        /// <param name="bytes">Данные</param>
+        /// <returns>Модель</returns>
         public static T DeserializeData<T>(byte[] bytes)
         {
             var srt = Encoding.Default.GetString(bytes);

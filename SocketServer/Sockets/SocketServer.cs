@@ -35,6 +35,7 @@ namespace SocketServer.Sockets
         public IPEndPoint IpEndPoint { get => _ipEndPoint; }
         public Socket Socket { get => _socket; }
         public SocketConnectionManager ConnectionManager => _connectionManager;
+        public string FullAddress => $"{_ipEndPoint.Address}:{_ipEndPoint.Port}";
 
         /// <summary>
         /// Конструктор сокет сервера
@@ -49,7 +50,7 @@ namespace SocketServer.Sockets
             _ipEndPoint = ipEndPoint;
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            Console.WriteLine($"------ WebSocket Server Started on {_ipEndPoint.Address.ToString()}:{_ipEndPoint.Port} ------");
+            Console.WriteLine($"------ WebSocket Server Started on {FullAddress} ------");
 
             Start();
         }
@@ -61,6 +62,12 @@ namespace SocketServer.Sockets
         {
             try
             {
+                if (_isListening)
+                {
+                    Log.Information("Socket Server already running");
+                    return;
+                }
+
                 _isListening = true;
                 _socket.Bind(_ipEndPoint);
                 _socket.Listen(50);
@@ -81,7 +88,7 @@ namespace SocketServer.Sockets
         {
             if(!_isListening)
             {
-                Log.Warning("Server is not running");
+                Log.Warning("Socket Server already is not running");
                 return;
             }    
             _socket.Close();
@@ -103,7 +110,7 @@ namespace SocketServer.Sockets
                 
                 _connectionManager.AddSocket(client);
                 
-                Log.Information($"Connected new Client: {client.Id} ({client.ClientIpEndPoint.Address}:{client.ClientIpEndPoint.Port})");
+                Log.Information($"Connected new client - {client.FullAddress}");
                 
                 OnClientConnect?.Invoke(this, new OnClientConnectedEventArgs(client));
                 
@@ -127,14 +134,14 @@ namespace SocketServer.Sockets
                 var bytes = SocketHelper.SerializeData(response);
 
                 client.Send(bytes);
-                
-                Log.Information($"Message: {response.Message}, send to Client: {client.Id}");
-                
+
+                Log.Information($"From {this.FullAddress} (server) to {client.FullAddress} (client): {response.Message}");
+
                 OnSendMessage?.Invoke(this, new OnSendMessageEventArgs(client, response));
             }
             catch(ObjectDisposedException ex)
             {
-                Log.Warning($"Client {client.Id} refused connection {ex}");
+                Log.Warning($"Client {client.FullAddress} refused connection {ex}");
                 client.Disconnect(false);
             }
             catch (Exception ex)
@@ -158,7 +165,7 @@ namespace SocketServer.Sockets
                 
                 client.Send(bytes);
                 
-                Log.Information($"Message: {response.Message}, send to Client: {client.Id}");
+                Log.Information($"From {this.FullAddress} (server) to {client.FullAddress} (client): {response.Message}");
 
                 OnSendMessage?.Invoke(this, new OnSendMessageEventArgs(client, response));
             }
@@ -177,7 +184,7 @@ namespace SocketServer.Sockets
         {
             try
             {
-                Log.Information($"Message: {message}, received from Client: {client.Id}");
+                Log.Information($"Receive from {client.FullAddress} (client): {message}");
                 
                 OnMessageReceived?.Invoke(this, new OnMessageReceivedEventArgs(client, message));
             }
@@ -198,7 +205,7 @@ namespace SocketServer.Sockets
                 var socketId = _connectionManager.GetId(client);
                 _connectionManager.RemoveSocket(socketId);
 
-                Log.Information($"Client dosconnected: {client.Id}");
+                Log.Information($"Client {client.FullAddress} dosconnected");
                 
                 OnClientDisconnected?.Invoke(this, new OnClientDisconnectedEventArgs(client));
             }

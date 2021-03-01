@@ -21,7 +21,6 @@ namespace SocketServer.Sockets
         private Guid _id;
         private byte[] _buffer = new byte[1024];
         private IPEndPoint _clientIpEndPoint;
-        private CancellationToken _ct;
         private System.Timers.Timer _timer;
         private bool _isPeriodicTaskWork = false;
 
@@ -34,7 +33,7 @@ namespace SocketServer.Sockets
         public Guid Id  => _id;
         public bool IsConnected => _socket.Connected;
         public IPEndPoint ClientIpEndPoint => _clientIpEndPoint;
-
+        public string FullAddress => $"{ClientIpEndPoint.Address}:{ClientIpEndPoint.Port}";
 
         /// <summary>
         /// Конструктор сокет клиента
@@ -47,7 +46,6 @@ namespace SocketServer.Sockets
             _serverSocket = serverSocket;
             _id = Guid.NewGuid();
             _clientIpEndPoint = (IPEndPoint)clientSocket.RemoteEndPoint;
-            _ct = new CancellationToken();
 
             _timer = new System.Timers.Timer();
             _timer.Stop();
@@ -101,7 +99,7 @@ namespace SocketServer.Sockets
         /// <param name="interval">Интервал (мс)</param>
         public void StartPeriodicTask(Action action, int interval = 2000)
         {
-            Task.Run(() =>
+            try
             {
                 if (_isPeriodicTaskWork)
                     return;
@@ -112,10 +110,14 @@ namespace SocketServer.Sockets
                     action();
                 };
                 _timer.Start();
-
                 _isPeriodicTaskWork = true;
+                Log.Information($"{this.FullAddress} (client) Start PeriodicTask");
 
-            });
+            }
+            catch(Exception ex)
+            {
+                Log.Error($"-- Error - StartPeriodicTask {ex}");
+            }
         }
 
         /// <summary>
@@ -125,11 +127,19 @@ namespace SocketServer.Sockets
         /// <param name="interval">Интервал (мс)</param>
         public void StopPeriodicTask()
         {
-            if (!_isPeriodicTaskWork)
-                return;
+            try
+            {
+                if (!_isPeriodicTaskWork)
+                    return;
 
-            _timer.Stop();
-            _isPeriodicTaskWork = false;
+                _timer.Stop();
+                _isPeriodicTaskWork = false;
+                Log.Information($"{this.FullAddress} (client) Stop PeriodicTask");
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"-- Error - StopPeriodicTask {ex}");
+            }
         }
 
         /// <summary>
@@ -165,6 +175,13 @@ namespace SocketServer.Sockets
         {
             try
             {
+                if (_isPeriodicTaskWork)
+                {
+                    _timer.Stop();
+                    _timer.Close();
+                    _timer.Dispose();
+                }
+
                 if (IsConnected)
                     _socket.Disconnect(reuseSocket);
 
