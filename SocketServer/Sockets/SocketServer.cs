@@ -205,7 +205,7 @@ namespace SocketServer.Sockets
                 var socketId = _connectionManager.GetId(client);
                 _connectionManager.RemoveSocket(socketId);
 
-                Log.Information($"Client {client.FullAddress} dosconnected");
+                Log.Information($"Client {client.FullAddress} disconnected");
                 
                 OnClientDisconnected?.Invoke(this, new OnClientDisconnectedEventArgs(client));
             }

@@ -4,7 +4,6 @@ using SocketServer.Sockets.EventArguments;
 using System;
 using System.Diagnostics;
 using System.Net;
-using SocketServer.Sockets;
 using Serilog.Events;
 using System.IO;
 
