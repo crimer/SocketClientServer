@@ -214,7 +214,7 @@ public class SocketServer
             }
         }
 
-        _events.CallClientDisconnectedEvent(this);
+        _events.CallClientDisconnectedEvent(this, ip);
 
         _clientController.RemoveClient(ip);
 

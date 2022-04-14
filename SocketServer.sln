@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketClient", "SocketClient\SocketClient.csproj", "{1A35C8F2-E208-4133-9DF8-C819E37A1508}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketShared", "SocketShared\SocketShared.csproj", "{2312B966-ACC1-436F-9E88-5C9242215592}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketServerApp", "SocketServerApp\SocketServerApp.csproj", "{209EDD43-51B0-4C7A-996E-FDC2154A649F}"
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1A35C8F2-E208-4133-9DF8-C819E37A1508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A35C8F2-E208-4133-9DF8-C819E37A1508}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A35C8F2-E208-4133-9DF8-C819E37A1508}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A35C8F2-E208-4133-9DF8-C819E37A1508}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2312B966-ACC1-436F-9E88-5C9242215592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2312B966-ACC1-436F-9E88-5C9242215592}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2312B966-ACC1-436F-9E88-5C9242215592}.Release|Any CPU.ActiveCfg = Release|Any CPU

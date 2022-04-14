@@ -11,4 +11,10 @@
       <ProjectReference Include="..\SocketShared\SocketShared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="config.ini">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
